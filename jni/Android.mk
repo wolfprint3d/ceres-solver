@@ -75,9 +75,9 @@
 LOCAL_PATH := $(call my-dir)
 
 # Ceres requires at least NDK version r9d to compile.
-ifneq ($(shell $(LOCAL_PATH)/assert_ndk_version.sh "r9d" $(NDK_ROOT)), true)
-  $(error Ceres requires NDK version r9d or greater)
-endif
+#ifneq ($(shell $(LOCAL_PATH)/assert_ndk_version.sh "r9d" $(NDK_ROOT)), true)
+#  $(error Ceres requires NDK version r9d or greater)
+#endif
 
 EIGEN_PATH := $(EIGEN_PATH)
 CERES_INCLUDE_PATHS := $(CERES_EXTRA_INCLUDES)
@@ -104,7 +104,6 @@ LOCAL_CFLAGS := $(CERES_EXTRA_DEFINES) \
                 -DCERES_NO_SUITESPARSE \
                 -DCERES_NO_CXSPARSE \
                 -DCERES_STD_UNORDERED_MAP
-
 
 # If the user did not enable threads in CERES_EXTRA_DEFINES, then add
 # CERES_NO_THREADS.
