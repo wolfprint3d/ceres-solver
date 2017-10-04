@@ -31,9 +31,11 @@ APP_PROJECT_PATH := $(call my-dir)
 
 APP_CPPFLAGS += -fno-exceptions
 APP_CPPFLAGS += -fno-rtti
+APP_CPPFLAGS += -strip-all
+APP_CPPFLAGS += -g0
 APP_OPTIM := release
 
 # Use libc++ from LLVM. It is a modern BSD licensed implementation of
 # the standard C++ library.
 APP_STL := c++_static
-APP_ABI := armeabi-v7a
+APP_ABI := arm64-v8a
