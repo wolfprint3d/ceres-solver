@@ -476,8 +476,10 @@ if (CXX11 AND COMPILER_HAS_CXX11_FLAG)
 endif (CXX11 AND COMPILER_HAS_CXX11_FLAG)
 
 # Set the Ceres compile definitions for the unordered_map configuration.
-include(FindUnorderedMap)
-find_unordered_map()
+#include(FindUnorderedMap)
+#find_unordered_map()
+set(UNORDERED_MAP_FOUND YES)
+set(HAVE_UNORDERED_MAP_IN_STD_NAMESPACE YES)
 if (UNORDERED_MAP_FOUND)
   if (HAVE_UNORDERED_MAP_IN_STD_NAMESPACE)
     list(APPEND CERES_COMPILE_OPTIONS CERES_STD_UNORDERED_MAP)
@@ -495,8 +497,10 @@ else (UNORDERED_MAP_FOUND)
 endif()
 
 # Set the Ceres compile definitions for the shared_ptr configuration.
-include(FindSharedPtr)
-find_shared_ptr()
+#include(FindSharedPtr)
+#find_shared_ptr()
+set(SHARED_PTR_FOUND YES)
+set(HAVE_SHARED_PTR_IN_STD_NAMESPACE YES)
 if (SHARED_PTR_FOUND)
   if (SHARED_PTR_TR1_MEMORY_HEADER)
     list(APPEND CERES_COMPILE_OPTIONS CERES_TR1_MEMORY_HEADER)
@@ -505,7 +509,7 @@ if (SHARED_PTR_FOUND)
     list(APPEND CERES_COMPILE_OPTIONS CERES_TR1_SHARED_PTR)
   endif (SHARED_PTR_TR1_NAMESPACE)
 else (SHARED_PTR_FOUND)
-  message(FATAL_ERROR "Unable to find shared_ptr, try enabling CXX11 option "
+  message("Unable to find shared_ptr, try enabling CXX11 option "
     "if you expect C++11 to be available.")
 endif (SHARED_PTR_FOUND)
 
