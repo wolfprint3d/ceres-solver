@@ -22,3 +22,5 @@ obj/
 jni/libs/
 .buildinfo
 ios
+android/
+windows/
