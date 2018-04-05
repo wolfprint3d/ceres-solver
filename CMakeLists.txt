@@ -195,7 +195,7 @@ if (IOS)
   update_cache_variable(TBB OFF)
   # Apple claims that the BLAS call dsyrk_ is a private API, and will not allow
   # you to submit to the Apple Store if the symbol is present.
-  update_cache_variable(LAPACK ON) # override oFF -> ON for iOS
+  update_cache_variable(LAPACK OFF) # override oFF -> ON for iOS
   message(STATUS "Building for iOS: SuiteSparse, CXSparse, gflags, "
     "and OpenMP are not available.")
 
