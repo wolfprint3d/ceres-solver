@@ -167,22 +167,22 @@ class AutoDiffCostFunction : public SizedCostFunction<kNumResiduals,
                                                       N0, N1, N2, N3, N4,
                                                       N5, N6, N7, N8, N9> {
  public:
-  // Takes ownership of functor. Uses the template-provided value for the
+  // Uses the template-provided value for the
   // number of residuals ("kNumResiduals").
-  explicit AutoDiffCostFunction(CostFunctor* functor)
-      : functor_(functor) {
+  explicit AutoDiffCostFunction(CostFunctor* functor, Ownership ownership)
+      : functor_(functor), ownership_(ownership) {
     CHECK_NE(kNumResiduals, DYNAMIC)
         << "Can't run the fixed-size constructor if the "
         << "number of residuals is set to ceres::DYNAMIC.";
   }
 
-  // Takes ownership of functor. Ignores the template-provided
+  // Ignores the template-provided
   // kNumResiduals in favor of the "num_residuals" argument provided.
   //
   // This allows for having autodiff cost functions which return varying
   // numbers of residuals at runtime.
-  AutoDiffCostFunction(CostFunctor* functor, int num_residuals)
-      : functor_(functor) {
+  AutoDiffCostFunction(CostFunctor* functor, Ownership ownership, int num_residuals)
+      : functor_(functor), ownership_(ownership) {
     CHECK_EQ(kNumResiduals, DYNAMIC)
         << "Can't run the dynamic-size constructor if the "
         << "number of residuals is not ceres::DYNAMIC.";
@@ -192,7 +192,11 @@ class AutoDiffCostFunction : public SizedCostFunction<kNumResiduals,
         ::set_num_residuals(num_residuals);
   }
 
-  virtual ~AutoDiffCostFunction() {}
+  virtual ~AutoDiffCostFunction() {
+    if (ownership_ != TAKE_OWNERSHIP) {
+      functor_.release();
+    }
+  }
 
   // Implementation details follow; clients of the autodiff cost function should
   // not have to examine below here.
@@ -220,6 +224,7 @@ class AutoDiffCostFunction : public SizedCostFunction<kNumResiduals,
 
  private:
   internal::scoped_ptr<CostFunctor> functor_;
+  Ownership ownership_;
 };
 
 }  // namespace ceres
