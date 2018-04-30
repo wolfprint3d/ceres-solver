@@ -125,27 +125,27 @@ class CostFunctionToFunctor {
         << N3 << ", " << N4 << ", " << N5 << ", " << N6 << ", " << N7 << ", "
         << N8 << ", " << N9;
 
-    const std::vector<int32>& parameter_block_sizes =
+    const int32* parameter_block_sizes =
         cost_function->parameter_block_sizes();
     const int num_parameter_blocks =
         (N0 > 0) + (N1 > 0) + (N2 > 0) + (N3 > 0) + (N4 > 0) +
         (N5 > 0) + (N6 > 0) + (N7 > 0) + (N8 > 0) + (N9 > 0);
-    CHECK_EQ(static_cast<int>(parameter_block_sizes.size()),
-             num_parameter_blocks);
+    const int param_block_len = cost_function->parameter_block_length();
+    CHECK_EQ(param_block_len, num_parameter_blocks);
 
     CHECK_EQ(N0, parameter_block_sizes[0]);
-    if (parameter_block_sizes.size() > 1) CHECK_EQ(N1, parameter_block_sizes[1]);  // NOLINT
-    if (parameter_block_sizes.size() > 2) CHECK_EQ(N2, parameter_block_sizes[2]);  // NOLINT
-    if (parameter_block_sizes.size() > 3) CHECK_EQ(N3, parameter_block_sizes[3]);  // NOLINT
-    if (parameter_block_sizes.size() > 4) CHECK_EQ(N4, parameter_block_sizes[4]);  // NOLINT
-    if (parameter_block_sizes.size() > 5) CHECK_EQ(N5, parameter_block_sizes[5]);  // NOLINT
-    if (parameter_block_sizes.size() > 6) CHECK_EQ(N6, parameter_block_sizes[6]);  // NOLINT
-    if (parameter_block_sizes.size() > 7) CHECK_EQ(N7, parameter_block_sizes[7]);  // NOLINT
-    if (parameter_block_sizes.size() > 8) CHECK_EQ(N8, parameter_block_sizes[8]);  // NOLINT
-    if (parameter_block_sizes.size() > 9) CHECK_EQ(N9, parameter_block_sizes[9]);  // NOLINT
+    if (param_block_len > 1) CHECK_EQ(N1, parameter_block_sizes[1]);  // NOLINT
+    if (param_block_len > 2) CHECK_EQ(N2, parameter_block_sizes[2]);  // NOLINT
+    if (param_block_len > 3) CHECK_EQ(N3, parameter_block_sizes[3]);  // NOLINT
+    if (param_block_len > 4) CHECK_EQ(N4, parameter_block_sizes[4]);  // NOLINT
+    if (param_block_len > 5) CHECK_EQ(N5, parameter_block_sizes[5]);  // NOLINT
+    if (param_block_len > 6) CHECK_EQ(N6, parameter_block_sizes[6]);  // NOLINT
+    if (param_block_len > 7) CHECK_EQ(N7, parameter_block_sizes[7]);  // NOLINT
+    if (param_block_len > 8) CHECK_EQ(N8, parameter_block_sizes[8]);  // NOLINT
+    if (param_block_len > 9) CHECK_EQ(N9, parameter_block_sizes[9]);  // NOLINT
 
-    CHECK_EQ(accumulate(parameter_block_sizes.begin(),
-                        parameter_block_sizes.end(), 0),
+    CHECK_EQ(std::accumulate(parameter_block_sizes,
+                        parameter_block_sizes + param_block_len, 0),
              N0 + N1 + N2 + N3 + N4 + N5 + N6 + N7 + N8 + N9);
   }
 

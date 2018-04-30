@@ -115,8 +115,12 @@ class CERES_EXPORT CostFunction {
                         double* residuals,
                         double** jacobians) const = 0;
 
-  const std::vector<int32>& parameter_block_sizes() const {
+  const int32* parameter_block_sizes() const {
     return parameter_block_sizes_;
+  }
+  
+  int parameter_block_length() const {
+    return parameter_block_len_;
   }
 
   int num_residuals() const {
@@ -124,8 +128,9 @@ class CERES_EXPORT CostFunction {
   }
 
  protected:
-  std::vector<int32>* mutable_parameter_block_sizes() {
-    return &parameter_block_sizes_;
+  void add_residual_parameter_block(int size) {
+    CHECK_LT(parameter_block_len_, 16) << "Max number of parameter blocks is 16";
+    parameter_block_sizes_[num_residuals_++] = size;
   }
 
   void set_num_residuals(int num_residuals) {
@@ -135,7 +140,8 @@ class CERES_EXPORT CostFunction {
  private:
   // Cost function signature metadata: number of inputs & their sizes,
   // number of outputs (residuals).
-  std::vector<int32> parameter_block_sizes_;
+  int32 parameter_block_sizes_[16];
+  int parameter_block_len_ = 0;
   int num_residuals_;
   CERES_DISALLOW_COPY_AND_ASSIGN(CostFunction);
 };

@@ -72,7 +72,7 @@ class SizedCostFunction : public CostFunction {
     set_num_residuals(kNumResiduals);
 
 #define CERES_ADD_PARAMETER_BLOCK(N) \
-    if (N) mutable_parameter_block_sizes()->push_back(N);
+    if (N) add_residual_parameter_block(N);
     CERES_ADD_PARAMETER_BLOCK(N0);
     CERES_ADD_PARAMETER_BLOCK(N1);
     CERES_ADD_PARAMETER_BLOCK(N2);

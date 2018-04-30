@@ -114,13 +114,12 @@ class DynamicCostFunctionToFunctor {
 
   template <typename JetT>
   bool operator()(JetT const* const* inputs, JetT* output) const {
-    const std::vector<int32>& parameter_block_sizes =
+    const int32* parameter_block_sizes =
         cost_function_->parameter_block_sizes();
-    const int num_parameter_blocks =
-        static_cast<int>(parameter_block_sizes.size());
+    const int num_parameter_blocks = cost_function_->parameter_block_length();
     const int num_residuals = cost_function_->num_residuals();
-    const int num_parameters = std::accumulate(parameter_block_sizes.begin(),
-                                               parameter_block_sizes.end(), 0);
+    const int num_parameters = std::accumulate(parameter_block_sizes,
+                                               parameter_block_sizes+num_parameter_blocks, 0);
 
     internal::FixedArray<double> parameters(num_parameters);
     internal::FixedArray<double*> parameter_blocks(num_parameter_blocks);
