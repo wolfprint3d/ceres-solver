@@ -75,10 +75,7 @@ class GradientCheckingCostFunction : public CostFunction {
         extra_info_(extra_info),
         callback_(callback) {
     CHECK_NOTNULL(callback_);
-    const int32* parameter_block_sizes = function->parameter_block_sizes();
-    const int len = function->parameter_block_sizes_len();
-    for (int i = 0; i < len; ++i)
-        add_residual_parameter_block(parameter_block_sizes[i]);
+    set_residual_parameter_block_sizes(function);
     set_num_residuals(function->num_residuals());
   }
 

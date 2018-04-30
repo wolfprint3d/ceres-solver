@@ -131,7 +131,17 @@ class CERES_EXPORT CostFunction {
  protected:
   void add_residual_parameter_block(int size) {
     CHECK_LT(parameter_block_len_, 12) << "Max number of parameter blocks is 12";
-    parameter_block_sizes_[num_residuals_++] = size;
+    parameter_block_sizes_[parameter_block_len_++] = size;
+  }
+  void set_residual_parameter_block_sizes(const int32* sizes, int count) {
+    CHECK_LT(count, 12) << "Max number of parameter blocks is 12";
+    parameter_block_len_ = count;
+    for (int i = 0; i < count; ++i)
+        parameter_block_sizes_[i] = sizes[i];
+  }
+  void set_residual_parameter_block_sizes(const CostFunction* function) {
+      set_residual_parameter_block_sizes(function->parameter_block_sizes_, 
+                                         function->parameter_block_len_);
   }
 
   void set_num_residuals(int num_residuals) {

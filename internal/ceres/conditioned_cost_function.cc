@@ -51,15 +51,12 @@ ConditionedCostFunction::ConditionedCostFunction(
       conditioners_(conditioners),
       ownership_(ownership) {
   // Set up our dimensions.
-  int len = wrapped_cost_function_->num_residuals();
-  auto* params = wrapped_cost_function_->parameter_block_sizes();
-  set_num_residuals(len);
-  for (int i = 0; i < len; ++i)
-    add_residual_parameter_block(params[i]);
+  set_num_residuals(wrapped_cost_function->num_residuals());
+  set_residual_parameter_block_sizes(wrapped_cost_function);
 
   // Sanity-check the conditioners' dimensions.
-  CHECK_EQ(wrapped_cost_function_->num_residuals(), conditioners_.size());
-  for (int i = 0; i < wrapped_cost_function_->num_residuals(); i++) {
+  CHECK_EQ(wrapped_cost_function->num_residuals(), conditioners_.size());
+  for (int i = 0; i < wrapped_cost_function->num_residuals(); i++) {
     if (conditioners[i]) {
       CHECK_EQ(1, conditioners[i]->num_residuals());
       CHECK_EQ(1, conditioners[i]->parameter_block_sizes_len());

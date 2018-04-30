@@ -73,9 +73,8 @@ class CallbackCostFunction : public ceres::CostFunction {
       : cost_function_(cost_function),
         user_data_(user_data) {
     set_num_residuals(num_residuals);
-    for (int i = 0; i < num_parameter_blocks; ++i) {
-      add_residual_parameter_block(parameter_block_sizes[i]);
-    }
+    set_residual_parameter_block_sizes(parameter_block_sizes, 
+                                       num_parameter_blocks);
   }
 
   virtual ~CallbackCostFunction() {}
