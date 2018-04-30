@@ -51,16 +51,18 @@ ConditionedCostFunction::ConditionedCostFunction(
       conditioners_(conditioners),
       ownership_(ownership) {
   // Set up our dimensions.
-  set_num_residuals(wrapped_cost_function_->num_residuals());
-  *mutable_parameter_block_sizes() =
-      wrapped_cost_function_->parameter_block_sizes();
+  int len = wrapped_cost_function_->num_residuals();
+  auto* params = wrapped_cost_function_->parameter_block_sizes();
+  set_num_residuals(len);
+  for (int i = 0; i < len; ++i)
+    add_residual_parameter_block(params[i]);
 
   // Sanity-check the conditioners' dimensions.
   CHECK_EQ(wrapped_cost_function_->num_residuals(), conditioners_.size());
   for (int i = 0; i < wrapped_cost_function_->num_residuals(); i++) {
     if (conditioners[i]) {
       CHECK_EQ(1, conditioners[i]->num_residuals());
-      CHECK_EQ(1, conditioners[i]->parameter_block_sizes().size());
+      CHECK_EQ(1, conditioners[i]->parameter_block_length());
       CHECK_EQ(1, conditioners[i]->parameter_block_sizes()[0]);
     }
   }
@@ -111,7 +113,7 @@ bool ConditionedCostFunction::Evaluate(double const* const* parameters,
 
       if (jacobians) {
         for (int i = 0;
-             i < wrapped_cost_function_->parameter_block_sizes().size();
+             i < wrapped_cost_function_->parameter_block_length();
              i++) {
           if (jacobians[i]) {
             int parameter_block_size =

@@ -49,9 +49,9 @@ class TernaryCostFunction: public CostFunction {
                       int32 parameter_block2_size,
                       int32 parameter_block3_size) {
     set_num_residuals(num_residuals);
-    mutable_parameter_block_sizes()->push_back(parameter_block1_size);
-    mutable_parameter_block_sizes()->push_back(parameter_block2_size);
-    mutable_parameter_block_sizes()->push_back(parameter_block3_size);
+    add_residual_parameter_block(parameter_block1_size);
+    add_residual_parameter_block(parameter_block2_size);
+    add_residual_parameter_block(parameter_block3_size);
   }
 
   virtual bool Evaluate(double const* const* parameters,

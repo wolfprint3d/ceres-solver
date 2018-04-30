@@ -98,8 +98,9 @@ class DynamicNumericDiffCostFunction : public DynamicCostFunction {
         << "You must call DynamicNumericDiffCostFunction::SetNumResiduals() "
         << "before DynamicNumericDiffCostFunction::Evaluate().";
 
-    const std::vector<int32>& block_sizes = parameter_block_sizes();
-    CHECK(!block_sizes.empty())
+    const int32* block_sizes = parameter_block_sizes();
+    int num_blocks = parameter_block_length();
+    CHECK(!num_blocks)
         << "You must call DynamicNumericDiffCostFunction::AddParameterBlock() "
         << "before DynamicNumericDiffCostFunction::Evaluate().";
 
@@ -109,23 +110,23 @@ class DynamicNumericDiffCostFunction : public DynamicCostFunction {
     }
 
     // Create local space for a copy of the parameters which will get mutated.
-    int parameters_size = accumulate(block_sizes.begin(), block_sizes.end(), 0);
+    int parameters_size = std::accumulate(block_sizes, block_sizes+num_blocks, 0);
     std::vector<double> parameters_copy(parameters_size);
-    std::vector<double*> parameters_references_copy(block_sizes.size());
+    std::vector<double*> parameters_references_copy(num_blocks);
     parameters_references_copy[0] = &parameters_copy[0];
-    for (size_t block = 1; block < block_sizes.size(); ++block) {
+    for (size_t block = 1; block < num_blocks; ++block) {
       parameters_references_copy[block] = parameters_references_copy[block - 1]
           + block_sizes[block - 1];
     }
 
     // Copy the parameters into the local temp space.
-    for (size_t block = 0; block < block_sizes.size(); ++block) {
+    for (size_t block = 0; block < num_blocks; ++block) {
       memcpy(parameters_references_copy[block],
              parameters[block],
              block_sizes[block] * sizeof(*parameters[block]));
     }
 
-    for (size_t block = 0; block < block_sizes.size(); ++block) {
+    for (size_t block = 0; block < num_blocks; ++block) {
       if (jacobians[block] != NULL &&
           !NumericDiff<CostFunctor, method, DYNAMIC,
                        DYNAMIC, DYNAMIC, DYNAMIC, DYNAMIC, DYNAMIC,

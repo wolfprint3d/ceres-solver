@@ -58,7 +58,7 @@ ResidualBlock::ResidualBlock(
       loss_function_(loss_function),
       parameter_blocks_(
           new ParameterBlock* [
-              cost_function->parameter_block_sizes().size()]),
+              cost_function->parameter_block_length()]),
       index_(index) {
   std::copy(parameter_blocks.begin(),
             parameter_blocks.end(),

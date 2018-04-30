@@ -49,6 +49,7 @@
 #include "ceres/internal/port.h"
 #include "ceres/types.h"
 #include "ceres/internal/disable_warnings.h"
+#include "glog/logging.h"
 
 namespace ceres {
 
