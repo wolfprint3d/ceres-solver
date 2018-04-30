@@ -76,7 +76,7 @@ class GradientCheckingCostFunction : public CostFunction {
         callback_(callback) {
     CHECK_NOTNULL(callback_);
     const int32* parameter_block_sizes = function->parameter_block_sizes();
-    const int len = function->parameter_block_length();
+    const int len = function->parameter_block_sizes_len();
     for (int i = 0; i < len; ++i)
         add_residual_parameter_block(parameter_block_sizes[i]);
     set_num_residuals(function->num_residuals());
@@ -109,7 +109,7 @@ class GradientCheckingCostFunction : public CostFunction {
 
     // Copy the original jacobian blocks into the jacobians array.
     const int32* block_sizes = function_->parameter_block_sizes();
-    const int len = function_->parameter_block_length();
+    const int len = function_->parameter_block_sizes_len();
     for (int k = 0; k < len; k++) {
       if (jacobians[k] != NULL) {
         MatrixRef(jacobians[k],

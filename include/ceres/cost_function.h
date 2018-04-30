@@ -120,7 +120,7 @@ class CERES_EXPORT CostFunction {
     return parameter_block_sizes_;
   }
   
-  int parameter_block_length() const {
+  int parameter_block_sizes_len() const {
     return parameter_block_len_;
   }
 

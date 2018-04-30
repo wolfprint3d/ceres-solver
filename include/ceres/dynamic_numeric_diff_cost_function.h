@@ -99,7 +99,7 @@ class DynamicNumericDiffCostFunction : public DynamicCostFunction {
         << "before DynamicNumericDiffCostFunction::Evaluate().";
 
     const int32* block_sizes = parameter_block_sizes();
-    int num_blocks = parameter_block_length();
+    int num_blocks = parameter_block_sizes_len();
     CHECK(!num_blocks)
         << "You must call DynamicNumericDiffCostFunction::AddParameterBlock() "
         << "before DynamicNumericDiffCostFunction::Evaluate().";

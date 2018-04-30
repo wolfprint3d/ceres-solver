@@ -66,7 +66,7 @@ bool EvaluateCostFunction(
   CHECK_NOTNULL(local_jacobians);
 
   const int32* block_sizes = function->parameter_block_sizes();
-  const int num_parameter_blocks = function->parameter_block_length();
+  const int num_parameter_blocks = function->parameter_block_sizes_len();
   
   // Allocate Jacobian matrices in local space.
   local_jacobians->resize(num_parameter_blocks);
@@ -126,7 +126,7 @@ GradientChecker::GradientChecker(
   if (local_parameterizations != NULL) {
     local_parameterizations_ = *local_parameterizations;
   } else {
-    local_parameterizations_.resize(function->parameter_block_length(),
+    local_parameterizations_.resize(function->parameter_block_sizes_len(),
                                     NULL);
   }
   DynamicNumericDiffCostFunction<CostFunction, CENTRAL>*
@@ -136,7 +136,7 @@ GradientChecker::GradientChecker(
   finite_diff_cost_function_.reset(finite_diff_cost_function);
 
   const int32* parameter_block_sizes = function->parameter_block_sizes();
-  const int num_parameter_blocks = function->parameter_block_length();
+  const int num_parameter_blocks = function->parameter_block_sizes_len();
   for (int i = 0; i < num_parameter_blocks; ++i) {
     finite_diff_cost_function->AddParameterBlock(parameter_block_sizes[i]);
   }
@@ -214,7 +214,7 @@ bool GradientChecker::Probe(double const* const * parameters,
   // Accumulate the error message for all the jacobians, since it won't get
   // output if there are no bad jacobian components.
   string error_log;
-  for (int k = 0; k < function_->parameter_block_length(); k++) {
+  for (int k = 0; k < function_->parameter_block_sizes_len(); k++) {
     StringAppendF(&error_log,
                   "========== "
                   "Jacobian for " "block %d: (%ld by %ld)) "

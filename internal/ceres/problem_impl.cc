@@ -268,13 +268,13 @@ ResidualBlock* ProblemImpl::AddResidualBlock(
     LossFunction* loss_function,
     const vector<double*>& parameter_blocks) {
   CHECK_NOTNULL(cost_function);
-  CHECK_EQ(parameter_blocks.size(), cost_function->parameter_block_length());
+  CHECK_EQ(parameter_blocks.size(), cost_function->parameter_block_sizes_len());
 
   // Check the sizes match.
   const int32* parameter_block_sizes = cost_function->parameter_block_sizes();
 
   if (!options_.disable_all_safety_checks) {
-    CHECK_EQ(cost_function->parameter_block_length(), parameter_blocks.size())
+    CHECK_EQ(cost_function->parameter_block_sizes_len(), parameter_blocks.size())
         << "Number of blocks input is different than the number of blocks "
         << "that the cost function expects.";
 

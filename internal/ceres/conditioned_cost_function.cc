@@ -62,7 +62,7 @@ ConditionedCostFunction::ConditionedCostFunction(
   for (int i = 0; i < wrapped_cost_function_->num_residuals(); i++) {
     if (conditioners[i]) {
       CHECK_EQ(1, conditioners[i]->num_residuals());
-      CHECK_EQ(1, conditioners[i]->parameter_block_length());
+      CHECK_EQ(1, conditioners[i]->parameter_block_sizes_len());
       CHECK_EQ(1, conditioners[i]->parameter_block_sizes()[0]);
     }
   }
@@ -113,7 +113,7 @@ bool ConditionedCostFunction::Evaluate(double const* const* parameters,
 
       if (jacobians) {
         for (int i = 0;
-             i < wrapped_cost_function_->parameter_block_length();
+             i < wrapped_cost_function_->parameter_block_sizes_len();
              i++) {
           if (jacobians[i]) {
             int parameter_block_size =

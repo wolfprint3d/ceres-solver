@@ -130,7 +130,7 @@ class CostFunctionToFunctor {
     const int num_parameter_blocks =
         (N0 > 0) + (N1 > 0) + (N2 > 0) + (N3 > 0) + (N4 > 0) +
         (N5 > 0) + (N6 > 0) + (N7 > 0) + (N8 > 0) + (N9 > 0);
-    const int param_block_len = cost_function->parameter_block_length();
+    const int param_block_len = cost_function->parameter_block_sizes_len();
     CHECK_EQ(param_block_len, num_parameter_blocks);
 
     CHECK_EQ(N0, parameter_block_sizes[0]);
