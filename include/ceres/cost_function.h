@@ -44,12 +44,10 @@
 #ifndef CERES_PUBLIC_COST_FUNCTION_H_
 #define CERES_PUBLIC_COST_FUNCTION_H_
 
-#include <vector>
 #include "ceres/internal/macros.h"
 #include "ceres/internal/port.h"
 #include "ceres/types.h"
 #include "ceres/internal/disable_warnings.h"
-#include "glog/logging.h"
 
 namespace ceres {
 
@@ -130,11 +128,13 @@ class CERES_EXPORT CostFunction {
 
  protected:
   void add_residual_parameter_block(int size) {
-    CHECK_LT(parameter_block_len_, 12) << "Max number of parameter blocks is 12";
+    if (parameter_block_len_ >= 12)
+      throw std::length_error("residual_parameter_block: Max number of parameter blocks is 12");
     parameter_block_sizes_[parameter_block_len_++] = size;
   }
   void set_residual_parameter_block_sizes(const int32* sizes, int count) {
-    CHECK_LT(count, 12) << "Max number of parameter blocks is 12";
+    if (count >= 12)
+      throw std::length_error("residual_parameter_block: Max number of parameter blocks is 12");
     parameter_block_len_ = count;
     for (int i = 0; i < count; ++i)
         parameter_block_sizes_[i] = sizes[i];
